@@ -12,13 +12,13 @@ rpmbuild -ba $SPEC_FILE
 ls -lah /github/home/rpmbuild/BUILD/ /github/home/rpmbuild/BUILD/yafti-0.1.0/
 
 ls -lah /github/home/rpmbuild/RPMS
-mkdir -p rpmbuild/SRPMS
-mkdir -p rpmbuild/RPMS
-cp /github/home/rpmbuild/SRPMS/* rpmbuild/SRPMS
-cp -R /github/home/rpmbuild/RPMS/. rpmbuild/RPMS/
-ls -la rpmbuild/SRPMS rpmbuild/RPMS
+mkdir -p /github/workspace/rpmbuild/SRPMS
+mkdir -p /github/workspace/rpmbuild/RPMS
+cp /github/home/rpmbuild/SRPMS/* /github/workspace/rpmbuild/SRPMS
+cp -R /github/home/rpmbuild/RPMS/. /github/workspace/rpmbuild/RPMS/
+ls -la /github/workspace/rpmbuild/SRPMS /github/workspace/rpmbuild/RPMS
 
 echo "source_rpm_dir_path=rpmbuild/SRPMS/" >> $GITHUB_OUTPUT
-echo "source_rpm_path=rpmbuild/SRPMS/$(ls rpmbuild/SRPMS)" >> $GITHUB_OUTPUT
-echo "source_rpm_name=$(ls rpmbuild/SRPMS)" >> $GITHUB_OUTPUT
+echo "source_rpm_path=rpmbuild/SRPMS/$(ls /github/workspace/rpmbuild/SRPMS)" >> $GITHUB_OUTPUT
+echo "source_rpm_name=$(ls /github/workspace/rpmbuild/SRPMS)" >> $GITHUB_OUTPUT
 echo "rpm_dir_path=rpmbuild/RPMS/" >> $GITHUB_OUTPUT
