@@ -1,5 +1,4 @@
-# Using CentOS 7 as base image to support rpmbuild (packages will be Dist el7)
-FROM centos:7
+FROM quay.io/fedora/fedora:38
 
 # Copying all contents of rpmbuild repo inside container
 COPY . .
