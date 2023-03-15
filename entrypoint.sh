@@ -9,7 +9,8 @@ ls -lah /github/workspace/dist/ /github/home/rpmbuild/SOURCES/
 dnf builddep -y $SPEC_FILE
 rpmbuild -ba $SPEC_FILE
 
-RPM_NAME=
+ls -lah /github/home/rpmbuild/BUILD/ /github/home/rpmbuild/BUILD/yafti-0.1.0/
+
 ls -lah /github/home/rpmbuild/RPMS
 mkdir -p rpmbuild/SRPMS
 mkdir -p rpmbuild/RPMS
