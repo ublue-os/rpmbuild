@@ -55,7 +55,8 @@ async function run() {
     // await exec.exec(`git archive --output=/github/home/rpmbuild/SOURCES/${name}-${version}.tar.gz --prefix=${name}-${version}/ HEAD`);
     // await exec.exec(`ln -s /github/home/rpmbuild/SOURCES/${name}-${version}.tar.gz /github/home/rpmbuild/SOURCES/${name}.tar.gz`);
     // Make this an input
-    await exec.exec(`ln -s /github/workspace/dist/*.tar.gz /github/home/rpmbuild/SOURCES/`)
+    await exec.exec(`cp /github/workspace/dist/*.tar.gz /github/home/rpmbuild/SOURCES/`)
+    await exec.exec(`ls -lah /github/workspace/dist/ /github/home/rpmbuild/SOURCES/`)
     process.env.GIT_DIR = oldGitDir;
 
     // Installs build dependencies
