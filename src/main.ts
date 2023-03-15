@@ -28,17 +28,17 @@ async function run() {
 
     // Read spec file and get values 
     var data = fs.readFileSync(specFile.srcFullPath, 'utf8');
-    let name = '';       
+    let name = '';
     let version = '';
 
-    for (var line of data.split('\n')){
-        var lineArray = line.split(/[ ]+/);
-        if(lineArray[0].includes('Name')){
-            name = name+lineArray[1];
-        }
-        if(lineArray[0].includes('Version')){
-            version = version+lineArray[1];
-        }   
+    for (var line of data.split('\n')) {
+      var lineArray = line.split(/[ ]+/);
+      if (lineArray[0].includes('Name')) {
+        name = name + lineArray[1];
+      }
+      if (lineArray[0].includes('Version')) {
+        version = version + lineArray[1];
+      }
     }
     console.log(`name: ${name}`);
     console.log(`version: ${version}`);
@@ -56,18 +56,8 @@ async function run() {
     await exec.exec(`ln -s /github/home/rpmbuild/SOURCES/${name}-${version}.tar.gz /github/home/rpmbuild/SOURCES/${name}.tar.gz`);
     process.env.GIT_DIR = oldGitDir;
 
-    // Installs additional repositories
-    const additionalRepos = core.getInput('additional_repos'); // user input, eg: '["centos-release-scl"]'
-	if (additionalRepos) {
-		const arr = JSON.parse(additionalRepos);
-		for (let i = 0; i < arr.length; i++) {
-			console.log(`Installing repo': ${arr[i]}`);
-    		await exec.exec(`yum install -y ${arr[i]}`);
-		};
-	}
-
-	// Installs build dependencies
-    await exec.exec(`yum-builddep -y ${specFile.destFullPath}`);
+    // Installs build dependencies
+    await exec.exec(`dnf builddep -y ${specFile.destFullPath}`);
 
     // Execute rpmbuild , -ba generates both RPMS and SPRMS
     try {
@@ -91,12 +81,12 @@ async function run() {
         //some err occurred
         console.error(err)
       } else {
-          // the *entire* stdout and stderr (buffered)
-          console.log(`stdout: ${stdout}`);
-          myOutput = myOutput+`${stdout}`.trim();
-          console.log(`stderr: ${stderr}`);
-        }
-      });
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        myOutput = myOutput + `${stdout}`.trim();
+        console.log(`stderr: ${stderr}`);
+      }
+    });
 
 
     // only contents of workspace can be changed by actions and used by subsequent actions 
@@ -109,14 +99,14 @@ async function run() {
 
     await exec.exec(`ls -la rpmbuild/SRPMS`);
     await exec.exec(`ls -la rpmbuild/RPMS`);
-    
+
     // set outputs to path relative to workspace ex ./rpmbuild/
     core.setOutput("source_rpm_dir_path", `rpmbuild/SRPMS/`);              // path to  SRPMS directory
     core.setOutput("source_rpm_path", `rpmbuild/SRPMS/${myOutput}`);       // path to Source RPM file
     core.setOutput("source_rpm_name", `${myOutput}`);                      // name of Source RPM file
     core.setOutput("rpm_dir_path", `rpmbuild/RPMS/`);                      // path to RPMS directory
     core.setOutput("rpm_content_type", "application/octet-stream");        // Content-type for Upload
-    
+
 
 
   } catch (error) {
